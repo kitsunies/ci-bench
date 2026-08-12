@@ -4,16 +4,16 @@ on:
     branches: [main]
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: optiplex
     steps:
       - uses: actions/checkout@v4
       - name: Log into Gitea Container Registry
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login gitea-http.gitea:3000 -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login gitea.lab -u "${{ secrets.REGISTRY_USER }}" --password-stdin
       - name: Build and push image
         run: |
-          TAG=gitea-http.gitea:3000/tommy/ci-bench:${{ gitea.sha }}
-          LATEST=gitea-http.gitea:3000/tommy/ci-bench:latest
+          TAG=gitea.lab/tommy/ci-bench:${{ gitea.sha }}
+          LATEST=gitea.lab/tommy/ci-bench:latest
           docker build -t $TAG -t $LATEST .
           docker push $TAG
           docker push $LATEST
